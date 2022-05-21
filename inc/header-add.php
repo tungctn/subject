@@ -3,20 +3,13 @@
 if (isset($_POST['btn_add'])) {
     global $conn;
     $user_add = $_SESSION['user_login'];
-    // echo $user_add;
+    $user_code = $_SESSION['user_code'];
     $error = array();
-    if (empty($_POST['name'])) {
-        $error['name'] = "Khong duoc de trong ten mon hoc";
-    } else {
-        
-        $name = $_POST['name'];
-        // $_SESSION['res_name'] = $res_name;
-    }
+    $code = $_GET['code'];
     if (empty($_POST['instructor'])) {
         $error['instructor'] = "Khong duoc de trong ten giang vien";
     } else {
         $instructor = $_POST['instructor'];
-        // $_SESSION['res_name'] = $res_name;
     }
     if (empty($_POST['level'])) {
         $error['level'] = "Khong duoc de trong";
@@ -41,10 +34,10 @@ if (isset($_POST['btn_add'])) {
     } else {
         $comment = $_POST['comment'];
     }
-    
+
     if (empty($error)) {
-        $sql = "INSERT INTO `info` (`code` , `instructor`, `level`, `evaluate`,`overall`,`comment`,`user_add`)" 
-        . "VALUES ('{$name}','{$instructor}','{$level}','{$evaluate}','{$overall}','{$comment}','{$user_add}')";
+        $sql = "INSERT INTO `info` (`code` , `instructor`, `level`, `evaluate`,`overall`,`comment`,`user_add`.`user_code`)"
+            . "VALUES ('{$code}','{$instructor}','{$level}','{$evaluate}','{$overall}','{$comment}','{$user_add}','{$user_code}')";
         if (mysqli_query($conn, $sql)) {
             echo "them du lieu thanh cong";
         } else {
@@ -74,7 +67,7 @@ if (isset($_POST['btn_add'])) {
     <!-- <link rel="stylesheet" href="./assets/font/themify-icons/themify-icons.css"> -->
 
     <meta name="theme-color" content="#7952b3">
-    <title>Restaurant</title>
+    <title>Subject</title>
 
 </head>
 
@@ -91,15 +84,15 @@ if (isset($_POST['btn_add'])) {
             <ul class="nav me-auto">
                 <li class="nav-item">
                     <a href="#" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
-                        <img src="public/image/res.png" alt="mdo" width="32" height="32">
-                        <span class="fs-4">Restaurant</span></a>
+                        <img src="public/image/sub.png" alt="mdo" width="32" height="32">
+                        <span class="fs-4">Subject</span></a>
                 </li>
                 <li class="nav-item"><a href="?page=home" class="nav-link link-dark px-2 active" aria-current="page">Trang
                         chủ</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Blog</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">FAQs</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">About us</a></li>
-                <li class="nav-item"><a href="?page=add" class="nav-link link-dark px-2">Add</a></li>
+                <!-- <li class="nav-item"><a href="?page=add" class="nav-link link-dark px-2">Add</a></li> -->
             </ul>
             <!-- Search -->
             <form class="d-flex">
@@ -111,9 +104,7 @@ if (isset($_POST['btn_add'])) {
                     <span><?php echo $_SESSION['user_login']; ?></span>
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
-                    <li><a class="dropdown-item" href="#">Thanh toán</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="?page=change">Đổi mật khẩu</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -126,20 +117,43 @@ if (isset($_POST['btn_add'])) {
     <div class="container" style="background-color: white;
     margin-top: 70px;
     border-radius: 16px;">
-        <h1 class="text-center">Them mon hoc</h1>
+        <h1 class="text-center">Thêm bài viết</h1>
         <div class="row">
             <div class="col-md-12 border p-5">
                 <form class="" action="" method="POST" enctype="multipart/form-data">
-                    <label class="mt-2" for="name">Ten mon hoc</label>
-                    <input class="d-block form-control " type="text" name="name" id="name">
-                    <label class="mt-2"  for="instructor">Giảng viên hướng dẫn</label>
+                    <!-- <label class="mt-2" for="name">Ten mon hoc</label>
+                    <input class="d-block form-control " type="text" name="name" id="name"> -->
+                    <label class="mt-2" for="instructor">Giảng viên hướng dẫn</label>
                     <input class="d-block form-control " type="text" name="instructor" id="instructor">
-                    <label class="mt-2"  for="level">Mức độ khó của các nội dung trong học phần</label>
-                    <input class="d-block form-control " type="text" name="level" id="level">
-                    <label class="mt-2"  for="evaluate">Khối lượng bài tập được giao trong học phần</label>
-                    <input class="d-block form-control " type="text" name="evaluate" id="evaluate">
-                    <label class="mt-2"  for="overall">Đánh giá tổng thể học phần</label>
-                    <input class="d-block form-control " type="text" name="overall" id="overall">
+                    <label class="mt-2" for="level">Mức độ khó của các nội dung trong học phần (/5)</label>
+                    <!-- <input class="d-block form-control " type="text" name="level" id="level"> -->
+                    <select class="form-select" id="level" aria-label="Default select example" name="level">
+                        <option selected>Chọn mức điểm</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <label class="mt-2" for="evaluate">Khối lượng bài tập được giao trong học phần (/5)</label>
+                    <!-- <input class="d-block form-control " type="text" name="evaluate" id="evaluate"> -->
+                    <select class="form-select" id="evaluate" aria-label="Default select example" name="evaluate">
+                        <option selected>Chọn mức điểm</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <label class="mt-2" for="overall">Đánh giá tổng thể học phần (/5)</label>
+                    <select class="form-select" id="overall" aria-label="Default select example" name="overall">
+                        <option selected>Chọn mức điểm</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                     <label class="mt-2" for="comment">Chi tiet</label>
                     <textarea class="d-block w-100 form-control " name="comment" id="comment" rows="7"></textarea>
                     <input class="btn btn-primary mt-5" type="submit" name="btn_add" value="Them mon hoc">

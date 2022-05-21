@@ -22,17 +22,22 @@ if (isset($_POST['btn_login'])) {
     if (empty($error)) {
         if (check_login($_POST['username'], $_POST['password'])) {
             $_SESSION['is_login'] = true;
-            $_SESSION['user_login'] = username($_POST['password']);
+            // $_SESSION['is_login_admin'] = false;
+            $_SESSION['user_code'] = $_POST['username'];
+            $_SESSION['user_login'] = fullname($_POST['username']);
+            $_SESSION['password'] = password($_POST['username']);
             redict_to("?page=home");
             echo "dang nhap thanh cong";
+        } elseif (check_admin($_POST['username'], $_POST['password'])) {
+            // $_SESSION['is_login'] = false;
+            $_SESSION['is_login_admin'] = true;
+            redict_to("?page=homeadmin");
+            echo "dang nhap thanh cong";
         } else {
-
             $error['account'] = "Tai khoan khong ton tai tren he thong";
             // echo "dang nhap that bai";
         }
     }
-} else {
-    $_SESSION['is_login'] = false;
 }
 
 ?>
@@ -104,7 +109,7 @@ if (isset($_POST['btn_login'])) {
             <?php
             }
             ?>
-            <span>Bạn là admin. Đăng nhập <a href="?page=signup">Tại đây</a></span>
+            <!-- <span>Bạn là admin. Đăng nhập <a href="?page=loginadmin">Tại đây</a></span> -->
         </form>
     </div>
 </body>

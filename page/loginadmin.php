@@ -22,10 +22,10 @@ if (isset($_POST['btn_signup'])) {
     }
     
     if (empty($error)) {
-        $_SESSION['is_login'] = true;
-        $_SESSION['user_login'] = $_POST['username'];
+        
         if (check_admin($_POST['username'], $_POST['password'])) {
-            $_SESSION['is_login'] = true;
+            $_SESSION['is_login_admin'] = true;
+            $_SESSION['is_login'] = false;
             $_SESSION['user_login'] = $_POST['username'];
             redict_to("?page=homeadmin");
         } else {
@@ -33,9 +33,7 @@ if (isset($_POST['btn_signup'])) {
             $error['account'] = "Tai khoan khong ton tai tren he thong";
         }
     }
-} else {
-    $_SESSION['is_login'] = false;
-}
+} 
 
 ?>
 

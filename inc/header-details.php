@@ -2,7 +2,7 @@
 
 global $list_info, $conn;
 $code = (string) $_GET['code'];
-echo $code;
+// echo $code;
 $sql = "SELECT * from `info` WHERE `info`.`code` = '$code'";
 $result = mysqli_query($conn, $sql);
 $info = array();
@@ -17,7 +17,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 <html lang="en">
 
 <head>
-    <title>Restaurant</title>
+    <title>Subject</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -42,15 +42,15 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
             <ul class="nav me-auto">
                 <li class="nav-item">
                     <a href="#" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
-                        <img src="public/image/res.png" alt="mdo" width="32" height="32">
-                        <span class="fs-4">Restaurant</span></a>
+                        <img src="public/image/sub.png" alt="mdo" width="32" height="32">
+                        <span class="fs-4">Subject</span></a>
                 </li>
                 <li class="nav-item"><a href="?page=home" class="nav-link link-dark px-2 active" aria-current="page">Trang
                         chủ</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Blog</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">FAQs</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">About us</a></li>
-                <li class="nav-item"><a href="?page=add" class="nav-link link-dark px-2">Add</a></li>
+                <!-- <li class="nav-item"><a href="?page=add" class="nav-link link-dark px-2">Add</a></li> -->
             </ul>
             <!-- Search -->
             <form class="d-flex">
@@ -62,9 +62,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
                     <span><?php echo $_SESSION['user_login']; ?></span>
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
-                    <li><a class="dropdown-item" href="#">Thanh toán</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="?page=change">Đổi mật khẩu</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -78,30 +76,105 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
     <header class="mt-3">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                </div>
-                <div class="col-md-8">
+                <div class="col-md-12">
+                    <a href="<?php echo "?page=add&code={$code}"; ?>" class="btn btn-danger w-30" style="float:right;">Tạo bài viêt</a>
                     <h2><?php echo name($code) . "-" . $code; ?></h2>
                     <?php
                     foreach ($info as $value) {
                     ?>
                         <p><span class="text-decoration-underline" style="font-weight: bold;"><?php echo $value['user_add']; ?></span> đã đăng:</p>
                         <p><span class="text-decoration-underline" style="font-style: italic; font-weight:lighter;"><?php echo $value['time']; ?></span></p>
-                        <nav>
-                            <p><span>Giảng viên hướng dẫn: <?php echo $value['instructor']; ?></span></p>
-                            <p><span>- Mức độ khó của các nội dung trong học phần: <?php echo $value['level']; ?>/5<?php echo ' - '.point($value['level']) ?></span></p>
-                            <p><span>- Khối lượng bài tập được giao trong học phần: <?php echo $value['evaluate']; ?>/5<?php echo ' - '.point($value['evaluate']) ?></span></p>
-                            <p><span>- Đánh giá tổng thể học phần: <?php echo $value['overall']; ?></span>/5<?php echo ' - '.point($value['overall']) ?></p>
 
-                        </nav>
+                        <style>
+                            .course {
+                                width: 80%;
+                                display: flex;
+                                border-radius: 20px;
+                                margin-top: 32px;
+                                /* margin-left: 100px; */
+                                background-color: #f2f2f2;
+                                padding: 20px;
+                            }
 
-                        <article>
-                            <?php echo $value['comment']; ?>
-                        </article>
+                            .course:hover {
+                                transform: scale(1.05);
+                                transition: transform 0.4s;
+                            }
 
-                        <a href="?page=home" class="btn btn-primary mt-5">Quay lai trang chu</a>
-                        <a href="<?php echo "?page=update&code={$code}&id={$value['id']}"; ?>" class="btn btn-warning mt-5">Sua thong tin</a>
-                        <a href="<?php echo "?page=delete&code={$code}&id={$value['id']}"; ?>" class="btn btn-danger mt-5">Xoa nha hang</a>
+                            .overall {
+                                font-weight: bold;
+                            }
+
+                            .score {
+                                margin: 8px 0px;
+                                text-align: center;
+                                border-radius: 8px;
+                                background-color: rgb(67, 232, 174);
+                                padding: 10px;
+                                color: black;
+                                font-weight: bold;
+                                font-size: 24px;
+                            }
+
+                            .review {
+                                font-size: 14px;
+                            }
+
+                            .right {
+                                padding-left: 30px;
+                                margin-top: 15px;
+                            }
+
+                            .course_name {
+                                font-size: 25px;
+                                color: black;
+                                margin-top: 15px;
+                            }
+
+                            .course_code {
+                                font-size: 15px;
+                                color: #636161;
+                                margin-top: 10px;
+                            }
+                        </style>
+                        <div class="course">
+                            <div class="left">
+                                <div class="overall text-center">Tổng quan (/5)</div>
+                                <div class="score" style="<?php if ($value['overall'] >= 4) {
+                                                                echo "background-color: rgb(67, 232, 174)";
+                                                            } elseif ($value['overall'] == 3) {
+                                                                echo "background-color: #fffa65";
+                                                            } else {
+                                                                echo "background-color: #ff4d4d";
+                                                            }  ?>"><?php echo convert_score($value['overall']); ?></div>
+                                <div class="review"></div>
+                                <div class="overall text-center">Độ khó (/5)</div>
+                                <div class="score" style="<?php if ($value['level'] <= 2) {
+                                                                echo "background-color: rgb(67, 232, 174)";
+                                                            } elseif ($value['level'] == 3) {
+                                                                echo "background-color: #fffa65";
+                                                            } else {
+                                                                echo "background-color: #ff4d4d";
+                                                            }  ?>"><?php echo convert_score($value['level']); ?></div>
+                                <div class="review"></div>
+                                <div class="overall text-center">Khối lượng BT (/5)</div>
+                                <div class="score" style="<?php if ($value['evaluate'] <= 2) {
+                                                                echo "background-color: rgb(67, 232, 174)";
+                                                            } elseif ($value['evaluate'] == 3) {
+                                                                echo "background-color: #fffa65";
+                                                            } else {
+                                                                echo "background-color: #ff4d4d";
+                                                            }  ?>"><?php echo convert_score($value['evaluate']); ?></div>
+                                <div class="review"></div>
+                            </div>
+                            <div class="right">
+                                <div class="course_name">
+                                    <h2>Giảng viên hướng dẫn: <?php echo $value['instructor']; ?></h2>
+                                </div>
+                                <div class="course_code"><?php echo $value['comment']; ?></div>
+                            </div>
+                        </div>
+
                         <br><br><br>
                     <?php
                     }
@@ -112,6 +185,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
             </div>
         </div>
     </header>
+    <!-- <a href="?page=home" class="btn btn-primary mt-5">Quay lai trang chu</a> -->
 </body>
 
 </html>

@@ -11,3 +11,11 @@ function check_admin($username, $password)
     return false;
 }
 
+function is_login_admin()
+{
+    if (isset($_SESSION['is_login_admin'])) {
+        return true;
+    }
+    return false;
+}
+

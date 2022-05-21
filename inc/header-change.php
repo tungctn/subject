@@ -5,23 +5,12 @@ global $list_user;
 
 if (isset($_POST['btn_change'])) {
     $error = array();
-    if (empty($_POST['username'])) {
-        $error['username'] = "Khong duoc de trong ten dang nhap";
-    } else {
-        $partten2 = " /^[A-Za-z0-9_\.]{6,32}$/";
-        if (!preg_match($partten2, $_POST['username'], $matchs)) {
-            $error['username'] = "Ten dang nhap khong dung dinh dang";
-        } else {
-            $username = $_POST['username'];
-        }
-    }
     if (empty($_POST['password'])) {
         $error['password'] = "Khong duoc de trong mat khau cu";
     } else {
-        if ($_POST['password'] != password($_SESSION['user_login'])) {
+        if (md5($_POST['password']) != $_SESSION['password']) {
             $error['password'] = "Mat khau cu khong dung";
         } else {
-            //  = md5($_POST['password']);
             $password = md5($_POST['password']);
         }
     }
@@ -37,9 +26,8 @@ if (isset($_POST['btn_change'])) {
         }
     }
     $user_login = $_SESSION['user_login'];
-    $sql = "UPDATE `users` SET `password` = '$new_password',`username` = '$username' where `username` = '$user_login'";
+    $sql = "UPDATE `users` SET `password` = '$new_password' where `password` = '$password'";
     $result = mysqli_query($conn, $sql);
-    // if ($)
 }
 
 ?>
@@ -60,7 +48,7 @@ if (isset($_POST['btn_change'])) {
     <!-- <link rel="stylesheet" href="./assets/font/themify-icons/themify-icons.css"> -->
 
     <meta name="theme-color" content="#7952b3">
-    <title>Restaurant</title>
+    <title>Subject</title>
 
 </head>
 
@@ -92,15 +80,15 @@ if (isset($_POST['btn_change'])) {
             <ul class="nav me-auto">
                 <li class="nav-item">
                     <a href="#" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
-                        <img src="public/image/res.png" alt="mdo" width="32" height="32">
-                        <span class="fs-4">Restaurant</span></a>
+                        <img src="public/image/sub.png" alt="mdo" width="32" height="32">
+                        <span class="fs-4">Subject</span></a>
                 </li>
                 <li class="nav-item"><a href="?page=home" class="nav-link link-dark px-2 active" aria-current="page">Trang
                         chủ</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Blog</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">FAQs</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">About us</a></li>
-                <li class="nav-item"><a href="?page=add" class="nav-link link-dark px-2">Add</a></li>
+                <!-- <li class="nav-item"><a href="?page=add" class="nav-link link-dark px-2">Add</a></li> -->
             </ul>
             <!-- Search -->
             <form class="d-flex">
@@ -130,8 +118,6 @@ if (isset($_POST['btn_change'])) {
         <div class="row">
             <div class="col-md-12 border p-5">
                 <form class="" action="" method="POST" enctype="multipart/form-data">
-                    <label class="mt-2" for="username">Username mới</label>
-                    <input class="d-block form-control " type="text" name="username" id="username">
                     <label class="mt-2" for="password">Mat khau cu</label>
                     <input class="d-block form-control " type="password" name="password" id="password">
                     <label class="mt-2" for="new_password">Mat khau moi</label>
@@ -140,9 +126,9 @@ if (isset($_POST['btn_change'])) {
 
                     <a href="?page=home" class="mt-5 btn btn-danger">Quay lai trang chu </a>
                     <?php 
-                    // if (empty($error) && isset($_POST['btn_change'])) {
+                    if (empty($error) && isset($_POST['btn_change'])) {
                         echo "<p class='text-primary mt-3'>Doi mat khau thanh cong</p>";
-                    // }
+                    }
                     ?>
 
                 </form>

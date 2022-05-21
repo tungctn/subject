@@ -10,6 +10,7 @@ get_header('homeadmin');
         <tr>
             <th scope="col">#</th>
             <th scope="col">Người đăng</th>
+            <th scope="col">MSSV</th>
             <th scope="col">Thời gian đăng</th>
             <th scope="col">Sửa bài đăng</th>
             <th scope="col">Xoá bài đăng</th>
@@ -19,13 +20,15 @@ get_header('homeadmin');
     <tbody>
         <?php
         global $list_info;
+        $temp = 0;
         foreach ($list_info as $value) {
             # code...
-            $temp = 0;
+            $temp++;
         ?>
             <tr>
-                <th scope="row"><?php echo ++$temp; ?></th>
+                <th scope="row"><?php echo $temp; ?></th>
                 <td><?php echo $value['user_add']; ?></td>
+                <td><?php echo $value['user_code']; ?></td>
                 <td><?php echo $value['time']; ?></td>
                 <td><a href="<?php echo "?page=updateadmin&code={$value['code']}&id={$value['id']}"; ?>">Sửa</a></td>
                 <td><a href="<?php echo "?page=deleteadmin&code={$value['code']}&id={$value['id']}"; ?>">Xoá</a></td>
