@@ -6,7 +6,6 @@ function name($code) {
         if ($list_course[$i]['code'] == $code) {
             return $list_course[$i]['name'];
         }
-        
     }
     
 }

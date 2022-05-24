@@ -66,3 +66,93 @@ body {
   font-size: 20px;
 }
 
+#backtop {
+  background-color: orange;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  right: 20px;
+  bottom: 40px;
+}
+
+.course {
+  width: 80%;
+  display: flex;
+  border-radius: 20px;
+  margin-top: 32px;
+  margin-left: 100px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.course:hover {
+  transform: scale(1.05);
+  transition: transform 0.4s;
+}
+
+.overall {
+  font-weight: bold;
+}
+
+.score {
+  margin: 8px 0px;
+  text-align: center;
+  border-radius: 8px;
+
+  padding: 10px;
+  color: black;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.review {
+  font-size: 14px;
+}
+
+.right {
+  padding-left: 30px;
+  margin-top: 15px;
+}
+
+.course_name {
+  font-size: 25px;
+  color: black;
+  margin-top: 15px;
+}
+
+.course_code {
+  font-size: 15px;
+  color: #636161;
+  margin-top: 10px;
+}
+
+.banner {
+  width: 100%;
+  height: 300px;
+  background-image: url('public/image/uet.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: 30% 24%;
+  position: relative;
+}
+
+.banner_body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(223, 59, 59, 0.5);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #fff;
+  font-size: 2.0rem;
+}
+

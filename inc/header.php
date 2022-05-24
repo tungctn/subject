@@ -1,37 +1,3 @@
-<?php
-
-global $conn;
-global $list_user;
-
-if (isset($_POST['btn_change'])) {
-    $error = array();
-    if (empty($_POST['password'])) {
-        $error['password'] = "Khong duoc de trong mat khau cu";
-    } else {
-        if (md5($_POST['password']) != $_SESSION['password']) {
-            $error['password'] = "Mat khau cu khong dung";
-        } else {
-            $password = md5($_POST['password']);
-        }
-    }
-
-    if (empty($_POST['new_password'])) {
-        $error['new_password'] = "Khong duoc de trong";
-    } else {
-        $partten2 = " /^[A-Za-z0-9_\.!@#%&*]{8,32}$/";
-        if (!preg_match($partten2, $_POST['new_password'], $matchs)) {
-            $error['new_password'] = "Mat khau khong dung dinh dang";
-        } else {
-            $new_password = md5($_POST['new_password']);
-        }
-    }
-    $user_login = $_SESSION['user_login'];
-    $sql = "UPDATE `users` SET `password` = '$new_password' where `password` = '$password'";
-    $result = mysqli_query($conn, $sql);
-}
-
-?>
-
 <!doctype html>
 <html lang="en">
 
@@ -43,16 +9,14 @@ if (isset($_POST['btn_change'])) {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- Css -->
-    <link href="public/css/home.css" rel="stylesheet">
-    <!-- Icons -->
-    <!-- <link rel="stylesheet" href="./assets/font/themify-icons/themify-icons.css"> -->
+    <link href="./public/css/home.css" rel="stylesheet">
 
     <meta name="theme-color" content="#7952b3">
     <title>Subject</title>
 
 </head>
 
-<body class="d-flex flex-column min-vh-100" style="min-height: 600px;">
+<body class="d-flex flex-column min-vh-100 bg-white" style="min-height: 600px;">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -66,13 +30,90 @@ if (isset($_POST['btn_change'])) {
             height: 50px;
             border-radius: 50%;
             display: flex;
-            /* text-align: center; */
             align-items: center;
             justify-content: center;
             position: fixed;
             right: 20px;
             bottom: 40px;
         }
+
+        .course {
+            width: 80%;
+            display: flex;
+            border-radius: 20px;
+            margin-top: 32px;
+            margin-left: 100px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        .course:hover {
+            transform: scale(1.05);
+            transition: transform 0.4s;
+        }
+
+        .overall {
+            font-weight: bold;
+        }
+
+        .score {
+            margin: 8px 0px;
+            text-align: center;
+            border-radius: 8px;
+
+            padding: 10px;
+            color: black;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .review {
+            font-size: 14px;
+        }
+
+        .right {
+            padding-left: 30px;
+            margin-top: 15px;
+        }
+
+        .course_name {
+            font-size: 25px;
+            color: black;
+            margin-top: 15px;
+        }
+
+        .course_code {
+            font-size: 15px;
+            color: #636161;
+            margin-top: 10px;
+        }
+
+        .banner {
+            width: 100%;
+            height: 300px;
+            background-image: url('public/image/uet.jpg');
+            background-repeat: no-repeat;
+            background-size: 100%;
+            background-position: 30% 24%;
+            position: relative;
+        }
+
+        .banner_body {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(223, 59, 59, 0.5);
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+            font-size: 2.0rem;
+        }
+        
     </style>
     <!-- Navigation -->
     <nav class="py-2 bg-light border-bottom navbar-fixed-top">
@@ -85,14 +126,13 @@ if (isset($_POST['btn_change'])) {
                 </li>
                 <li class="nav-item"><a href="?page=home" class="nav-link link-dark px-2 active" aria-current="page">Trang
                         chủ</a></li>
-                <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Blog</a></li>
-                <li class="nav-item"><a href="#" class="nav-link link-dark px-2">FAQs</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-dark px-2">About us</a></li>
+                <!-- <li class="nav-item"><a href="?page=me" class="nav-link link-dark px-2">About me</a></li> -->
                 <!-- <li class="nav-item"><a href="?page=add" class="nav-link link-dark px-2">Add</a></li> -->
             </ul>
             <!-- Search -->
-            <form class="d-flex">
-                <input type="search" class="form-control" style="margin-right: 30px;" placeholder="Tìm kiếm" aria-label="Search">
+            <form class="d-flex" method="POST">
+                <input type="search" class="form-control" style="margin-right: 30px;" placeholder="Tìm kiếm" aria-label="Search" name="search">
             </form>
             <!-- End search -->
             <div class="dropdown text-end">
@@ -101,7 +141,7 @@ if (isset($_POST['btn_change'])) {
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
 
-                    <li><a class="dropdown-item" href="#">Doi mat khau</a></li>
+                    <li><a class="dropdown-item" href="?page=change">Đổi mật khẩu</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -111,28 +151,9 @@ if (isset($_POST['btn_change'])) {
         </div>
     </nav>
     <!-- End navigation -->
-    <div class="container" style="background-color: white;
-    margin-top: 70px;
-    border-radius: 16px;">
-        <h1 class="text-center">Doi mat khau</h1>
-        <div class="row">
-            <div class="col-md-12 border p-5">
-                <form class="" action="" method="POST" enctype="multipart/form-data">
-                    <label class="mt-2" for="password">Mat khau cu</label>
-                    <input class="d-block form-control " type="password" name="password" id="password">
-                    <label class="mt-2" for="new_password">Mat khau moi</label>
-                    <input class="d-block form-control " type="password" name="new_password" id="new_password">
-                    <input class="btn btn-primary mt-5" type="submit" name="btn_change" value="Doi mat khau">
-
-                    <a href="?page=home" class="mt-5 btn btn-danger">Quay lai trang chu </a>
-                    <?php 
-                    if (empty($error) && isset($_POST['btn_change'])) {
-                        echo "<p class='text-primary mt-3'>Doi mat khau thanh cong</p>";
-                    }
-                    ?>
-
-                </form>
-            </div>
+    <div class="banner">
+        <div class="banner_body">
+            <h1>Reviewsubject</h1>
+            <p>Trang web review môn học số 1 UET</p>
         </div>
-
     </div>

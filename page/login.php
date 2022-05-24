@@ -4,38 +4,31 @@
 if (isset($_POST['btn_login'])) {
     $error = array();
     if (empty($_POST['username'])) {
-        $error['username'] = "Khong duoc de trong ten dang nhap";
+        $error['username'] = "Không được để trống tên đăng nhập";
     } else {
-        $partten2 = " /^[A-Za-z0-9_\.]{6,32}$/";
+        $partten2 = " /^[A-Za-z0-9_\.]{8,100}$/";
         if (!preg_match($partten2, $_POST['username'], $matchs)) {
-            $error['username'] = "Ten dang nhap khong dung dinh dang";
+            $error['username'] = "Tên đăng nhập không đúng định dạng";
         }
     }
     if (empty($_POST['password'])) {
-        $error['password'] = "Khong duoc de trong mat khau";
+        $error['password'] = "Không được để trống mật khẩu";
     } else {
-        $partten2 = " /^[A-Za-z0-9_\.!@#%&*]{8,32}$/";
+        $partten2 = " /^[A-Za-z0-9_\.!@#%&*]{8,100}$/";
         if (!preg_match($partten2, $_POST['password'], $matchs)) {
-            $error['password'] = "Mat khau khong dung dinh dang";
+            $error['password'] = "Mật khẩu không đúng định dạng";
         }
     }
     if (empty($error)) {
         if (check_login($_POST['username'], $_POST['password'])) {
             $_SESSION['is_login'] = true;
-            // $_SESSION['is_login_admin'] = false;
             $_SESSION['user_code'] = $_POST['username'];
             $_SESSION['user_login'] = fullname($_POST['username']);
             $_SESSION['password'] = password($_POST['username']);
             redict_to("?page=home");
             echo "dang nhap thanh cong";
-        } elseif (check_admin($_POST['username'], $_POST['password'])) {
-            // $_SESSION['is_login'] = false;
-            $_SESSION['is_login_admin'] = true;
-            redict_to("?page=homeadmin");
-            echo "dang nhap thanh cong";
         } else {
-            $error['account'] = "Tai khoan khong ton tai tren he thong";
-            // echo "dang nhap that bai";
+            $error['account'] = "Tài khoản không tồn tại trên hệ thống";
         }
     }
 }

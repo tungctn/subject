@@ -8,21 +8,6 @@ function show_array($data) {
     }
 }
 
-// function is_login() {
-//     if($_SESSION['is_login']) {
-//         return true;
-//     }
-//     return false;
-// }
 
-function point($point) {
-    if ($point <= 2) {
-        return "Dễ";
-    } 
-    if ($point == 3) {
-        return "Trung bình";
-    }
-    return "Khó";
-}
 
 
